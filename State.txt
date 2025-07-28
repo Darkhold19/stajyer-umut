@@ -1,0 +1,46 @@
+using System;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Lamba lamba = new Lamba();
+            lamba.DugmeyeBas(); // Açılır
+            lamba.DugmeyeBas(); // Kapanır
+
+            Console.ReadLine();
+        }
+    }
+
+    public interface ILambaDurumu
+    {
+        void DugmeyeBas(Lamba lamba);
+    }
+
+    public class Acik : ILambaDurumu
+    {
+        public void DugmeyeBas(Lamba lamba)
+        {
+            Console.WriteLine("Lamba kapatılıyor.");
+            lamba.Durum = new Kapali();
+        }
+    }
+
+    public class Kapali : ILambaDurumu
+    {
+        public void DugmeyeBas(Lamba lamba)
+        {
+            Console.WriteLine("Lamba açılıyor.");
+            lamba.Durum = new Acik();
+        }
+    }
+
+    public class Lamba
+    {
+        public ILambaDurumu Durum { get; set; } = new Kapali();
+
+        public void DugmeyeBas() => Durum.DugmeyeBas(this);
+    }
+}

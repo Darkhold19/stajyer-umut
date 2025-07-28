@@ -1,0 +1,60 @@
+using System;
+
+namespace SolidExamples
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hangi yol ile gidilsin? (araba/yuruyerek):");
+            string secim = Console.ReadLine()?.ToLower();
+
+            IGuzergah strateji;
+
+            if (secim == "araba")
+                strateji = new ArabaIle();
+            else if (secim == "yuruyerek")
+                strateji = new Yuruyerek();
+            else
+            {
+                Console.WriteLine("Geçersiz seçim.");
+                return;
+            }
+
+            Navigasyon nav = new Navigasyon(strateji);
+            nav.RotaHesapla();
+
+            Console.ReadLine();
+        }
+    }
+
+    public interface IGuzergah
+    {
+        void YolHesapla();
+    }
+
+    public class ArabaIle : IGuzergah
+    {
+        public void YolHesapla() => Console.WriteLine("Araba ile rota hesaplandı.");
+    }
+
+    public class Yuruyerek : IGuzergah
+    {
+        public void YolHesapla() => Console.WriteLine("Yürüyerek rota hesaplandı.");
+    }
+
+    public class Navigasyon
+    {
+        private IGuzergah _yolStratejisi;
+
+        public Navigasyon(IGuzergah yolStratejisi)
+        {
+            _yolStratejisi = yolStratejisi;
+        }
+
+        public void RotaHesapla()
+        {
+            _yolStratejisi.YolHesapla();
+        }
+    }
+}

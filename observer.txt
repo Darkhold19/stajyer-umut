@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            HavaDurumu hava = new HavaDurumu();
+            hava.AboneEkle(new Vatandas("Ahmet"));
+            hava.AboneEkle(new Vatandas("Ayşe"));
+
+            hava.SicaklikDegistir(35);
+
+            Console.ReadLine();
+        }
+    }
+
+    public interface IAbone
+    {
+        void Guncelle(int sicaklik);
+    }
+
+    public class Vatandas : IAbone
+    {
+        private string isim;
+
+        public Vatandas(string isim) => this.isim = isim;
+
+        public void Guncelle(int sicaklik) =>
+            Console.WriteLine($"{isim} yeni sıcaklık: {sicaklik}°C");
+    }
+
+    public class HavaDurumu
+    {
+        private List<IAbone> aboneler = new();
+        private int sicaklik;
+
+        public void AboneEkle(IAbone abone) => aboneler.Add(abone);
+
+        public void SicaklikDegistir(int yeniSicaklik)
+        {
+            sicaklik = yeniSicaklik;
+            foreach (var abone in aboneler)
+                abone.Guncelle(sicaklik);
+        }
+    }
+}

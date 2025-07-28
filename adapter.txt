@@ -1,0 +1,38 @@
+using System;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            IUyarlayici adapt = new PrizAdaptoru();
+            adapt.TelefonuSarjEt();
+
+            Console.ReadLine();
+        }
+    }
+
+    // Hedef arayüz
+    public interface IUyarlayici
+    {
+        void TelefonuSarjEt();
+    }
+
+    // Uyumlu olmayan sınıf
+    public class AvrupaPrizi
+    {
+        public void ElektrikVer() => Console.WriteLine("Elektrik verildi.");
+    }
+
+    // Adaptör sınıfı
+    public class PrizAdaptoru : IUyarlayici
+    {
+        private AvrupaPrizi priz = new AvrupaPrizi();
+
+        public void TelefonuSarjEt()
+        {
+            priz.ElektrikVer();
+        }
+    }
+}

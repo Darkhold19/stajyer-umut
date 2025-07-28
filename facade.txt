@@ -1,0 +1,33 @@
+using System;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            BilgisayarFacade bilgisayar = new BilgisayarFacade();
+            bilgisayar.Baslat();
+
+            Console.ReadLine();
+        }
+    }
+
+    public class Islemci { public void Calistir() => Console.WriteLine("İşlemci çalıştı"); }
+    public class Bellek { public void Yukle() => Console.WriteLine("Bellek yüklendi"); }
+    public class Disk { public void Oku() => Console.WriteLine("Disk okundu"); }
+
+    public class BilgisayarFacade
+    {
+        private Islemci islemci = new();
+        private Bellek bellek = new();
+        private Disk disk = new();
+
+        public void Baslat()
+        {
+            islemci.Calistir();
+            bellek.Yukle();
+            disk.Oku();
+        }
+    }
+}

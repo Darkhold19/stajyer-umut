@@ -1,0 +1,58 @@
+using System;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            YemekBuilder builder = new HamburgerBuilder();
+            Asci asci = new Asci(builder);
+            asci.Hazirla();
+
+            Yemek yemek = builder.Getir();
+            yemek.Yazdir();
+
+            Console.ReadLine();
+        }
+    }
+
+    public class Yemek
+    {
+        public string AnaUrun { get; set; }
+        public string Icecek { get; set; }
+
+        public void Yazdir()
+        {
+            Console.WriteLine($"Yemek: {AnaUrun}, İçecek: {Icecek}");
+        }
+    }
+
+    public abstract class YemekBuilder
+    {
+        protected Yemek yemek = new Yemek();
+
+        public abstract void AnaUrunHazirla();
+        public abstract void IcecekHazirla();
+        public Yemek Getir() => yemek;
+    }
+
+    public class HamburgerBuilder : YemekBuilder
+    {
+        public override void AnaUrunHazirla() => yemek.AnaUrun = "Hamburger";
+        public override void IcecekHazirla() => yemek.Icecek = "Kola";
+    }
+
+    public class Asci
+    {
+        private YemekBuilder builder;
+
+        public Asci(YemekBuilder builder) => this.builder = builder;
+
+        public void Hazirla()
+        {
+            builder.AnaUrunHazirla();
+            builder.IcecekHazirla();
+        }
+    }
+}

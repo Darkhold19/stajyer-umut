@@ -1,0 +1,193 @@
+using System;
+
+namespace SolidExamples
+{
+    // ------------------ 1. Single Responsibility Principle ------------------
+
+    public class Report
+    {
+        public string Title { get; set; }
+    }
+
+    public class ReportPrinter
+    {
+        public void Print(Report report)
+        {
+            Console.WriteLine($"[Single Responsibility] Rapor Yazdırıldı: {report.Title}");
+        }
+    }
+
+    public class ReportSaver
+    {
+        public void Save(Report report)
+        {
+            Console.WriteLine($"[Single Responsibility] Rapor Kaydedildi: {report.Title}");
+        }
+    }
+
+    // ------------------ 2. Open/Closed Principle ------------------
+
+    public abstract class Discount
+    {
+        public abstract double ApplyDiscount(double price);
+    }
+
+    public class SeasonalDiscount : Discount
+    {
+        public override double ApplyDiscount(double price)
+        {
+            return price * 0.9;
+        }
+    }
+
+    public class VIPDiscount : Discount
+    {
+        public override double ApplyDiscount(double price)
+        {
+            return price * 0.8;
+        }
+    }
+
+    // ------------------ 3. Liskov Substitution Principle ------------------
+
+    public abstract class Bird
+    {
+        public abstract void Eat();
+    }
+
+    public interface IFlyingBird
+    {
+        void Fly();
+    }
+
+    public class Sparrow : Bird, IFlyingBird
+    {
+        public override void Eat()
+        {
+            Console.WriteLine("[Liskov] Serçe yem yiyor.");
+        }
+
+        public void Fly()
+        {
+            Console.WriteLine("[Liskov] Serçe uçuyor.");
+        }
+    }
+
+    public class Ostrich : Bird
+    {
+        public override void Eat()
+        {
+            Console.WriteLine("[Liskov] Devekuşu yem yiyor.");
+        }
+        // Uçamaz, Fly() yok.
+    }
+
+    // ------------------ 4. Interface Segregation Principle ------------------
+
+    public interface IPrinter
+    {
+        void Print();
+    }
+
+    public interface IScanner
+    {
+        void Scan();
+    }
+
+    public class SimplePrinter : IPrinter
+    {
+        public void Print()
+        {
+            Console.WriteLine("[Interface Segregation] Yazıcı: Yazdırma işlemi yapıldı.");
+        }
+    }
+
+    public class MultiFunctionPrinter : IPrinter, IScanner
+    {
+        public void Print()
+        {
+            Console.WriteLine("[Interface Segregation] Çok Fonksiyonlu Yazıcı: Yazdırma işlemi yapıldı.");
+        }
+
+        public void Scan()
+        {
+            Console.WriteLine("[Interface Segregation] Çok Fonksiyonlu Yazıcı: Tarama işlemi yapıldı.");
+        }
+    }
+
+    // ------------------ 5. Dependency Inversion Principle ------------------
+
+    public interface IDatabase
+    {
+        void SaveData(string data);
+    }
+
+    public class MySqlDatabase : IDatabase
+    {
+        public void SaveData(string data)
+        {
+            Console.WriteLine("[Dependency Inversion] MySQL Veritabanına kaydedildi: " + data);
+        }
+    }
+
+    public class DataManager
+    {
+        private IDatabase _db;
+
+        public DataManager(IDatabase db)
+        {
+            _db = db;
+        }
+
+        public void Save(string data)
+        {
+            _db.SaveData(data);
+        }
+    }
+
+    // ------------------ Main Program ------------------
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("=== SOLID Prensipleri Örnekleri Başlıyor ===\n");
+
+            // 1. Single Responsibility
+            var report = new Report { Title = "Yıllık Finans Raporu" };
+            var printer = new ReportPrinter();
+            var saver = new ReportSaver();
+            printer.Print(report);
+            saver.Save(report);
+
+            // 2. Open/Closed
+            Discount discount = new SeasonalDiscount();
+            Console.WriteLine("[Open/Closed] İndirimli Fiyat (Seasonal): " + discount.ApplyDiscount(100));
+            discount = new VIPDiscount();
+            Console.WriteLine("[Open/Closed] İndirimli Fiyat (VIP): " + discount.ApplyDiscount(100));
+
+            // 3. Liskov Substitution
+            Bird bird1 = new Sparrow();
+            bird1.Eat();
+            ((IFlyingBird)bird1).Fly();
+
+            Bird bird2 = new Ostrich();
+            bird2.Eat();
+
+            // 4. Interface Segregation
+            IPrinter printer1 = new SimplePrinter();
+            printer1.Print();
+
+            MultiFunctionPrinter printer2 = new MultiFunctionPrinter();
+            printer2.Print();
+            printer2.Scan();
+
+            // 5. Dependency Inversion
+            IDatabase db = new MySqlDatabase();
+            var manager = new DataManager(db);
+            manager.Save("Ürün Listesi");
+
+            Console.WriteLine("\n=== SOLID Prensipleri Örnekleri Bitti ===");
+        }
+    }
+}

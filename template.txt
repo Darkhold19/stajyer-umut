@@ -1,0 +1,36 @@
+using System;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            YemekTarifi tarif = new MakarnaTarifi();
+            tarif.Hazirla();
+
+            Console.ReadLine();
+        }
+    }
+
+    public abstract class YemekTarifi
+    {
+        public void Hazirla()
+        {
+            MalzemeHazirla();
+            Pisir();
+            ServisEt();
+        }
+
+        protected abstract void MalzemeHazirla();
+        protected abstract void Pisir();
+
+        protected virtual void ServisEt() => Console.WriteLine("Servis edildi.");
+    }
+
+    public class MakarnaTarifi : YemekTarifi
+    {
+        protected override void MalzemeHazirla() => Console.WriteLine("Makarna ve su hazır.");
+        protected override void Pisir() => Console.WriteLine("Makarna haşlanıyor.");
+    }
+}

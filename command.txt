@@ -1,0 +1,40 @@
+using System;
+
+namespace SolidExamples
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Komutu oluştur
+            ICommand komut = new IsikAcCommand();
+
+            // Kumandaya komutu ver
+            Kumanda kumanda = new Kumanda();
+            kumanda.KomutVer(komut);
+
+            Console.ReadLine();//komut arayüzü
+        }
+    }
+
+    // Komut arayüzü
+    public interface ICommand
+    {
+        void Calistir();
+    }
+
+    // Işık açma komutu
+    public class IsikAcCommand : ICommand
+    {
+        public void Calistir() => Console.WriteLine("Işık açıldı.");
+    }
+
+    // Kumanda sınıfı (komutu çalıştıran)
+    public class Kumanda
+    {
+        public void KomutVer(ICommand komut)
+        {
+            komut.Calistir();
+        }
+    }
+}

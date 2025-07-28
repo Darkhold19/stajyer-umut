@@ -1,0 +1,40 @@
+using System;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            IIcecek cay = new Cay();
+            IIcecek limonluCay = new LimonDecorator(cay);
+
+            limonluCay.Ic();
+
+            Console.ReadLine();
+        }
+    }
+
+    public interface IIcecek
+    {
+        void Ic();
+    }
+
+    public class Cay : IIcecek
+    {
+        public void Ic() => Console.WriteLine("Çay içiliyor");
+    }
+
+    public class LimonDecorator : IIcecek
+    {
+        private IIcecek icecek;
+
+        public LimonDecorator(IIcecek icecek) => this.icecek = icecek;
+
+        public void Ic()
+        {
+            icecek.Ic();
+            Console.WriteLine("Limon eklendi");
+        }
+    }
+}

@@ -1,0 +1,45 @@
+using System;
+
+namespace SolidExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            IDosya dosya = new DosyaProxy("gizli.txt");
+            dosya.Ac();
+
+            Console.ReadLine();
+        }
+    }
+
+    public interface IDosya
+    {
+        void Ac();
+    }
+
+    public class GercekDosya : IDosya
+    {
+        private string dosyaAdi;
+
+        public GercekDosya(string dosyaAdi) => this.dosyaAdi = dosyaAdi;
+
+        public void Ac() => Console.WriteLine($"{dosyaAdi} dosyası açıldı.");
+    }
+
+    public class DosyaProxy : IDosya
+    {
+        private string dosyaAdi;
+        private GercekDosya gercekDosya;
+
+        public DosyaProxy(string dosyaAdi) => this.dosyaAdi = dosyaAdi;
+
+        public void Ac()
+        {
+            if (gercekDosya == null)
+                gercekDosya = new GercekDosya(dosyaAdi);
+
+            gercekDosya.Ac();
+        }
+    }
+}

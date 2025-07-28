@@ -1,0 +1,52 @@
+using System;
+
+namespace SolidExamples
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Elektrik sayacının örneğini al ve ölçüm yap
+            ElektrikSayaci sayac1 = ElektrikSayaci.Instance;
+            sayac1.OlcumYap();
+
+            // İkinci kez örnek almaya çalış
+            ElektrikSayaci sayac2 = ElektrikSayaci.Instance;
+            sayac2.OlcumYap();
+
+            // Aynı nesne mi kontrol edelim
+            Console.WriteLine(Object.ReferenceEquals(sayac1, sayac2)
+                ? "Aynı nesne (Singleton çalışıyor)"
+                : "Farklı nesne (Bir hata var)");
+
+            Console.ReadLine();
+        }
+    }
+
+    public class ElektrikSayaci
+    {
+        private static ElektrikSayaci _instance;
+        private static readonly object _lock = new object();
+
+        // Yapıcıyı private yaptık, dışarıdan newlenemesin
+        private ElektrikSayaci() { }
+
+        public static ElektrikSayaci Instance
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                        _instance = new ElektrikSayaci();
+                    return _instance;
+                }
+            }
+        }
+
+        public void OlcumYap()
+        {
+            Console.WriteLine("Ölçüm yapıldı.");
+        }
+    }
+}
